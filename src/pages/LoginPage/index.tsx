@@ -32,6 +32,7 @@ export default function LoginPage() {
   });
   const navigation = useNavigate();
   const store = useContext(chatContext);
+  // const {setUser} = store
 
   const onSubmit: SubmitHandler<FormValues> = async (loginInfo) => {
     console.log("submit ", loginInfo);
