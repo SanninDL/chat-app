@@ -37,13 +37,6 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
-export const CustomTextField = styled(TextField)`
-  width: 100%;
-  margin-bottom: 24px;
-  input {
-    padding: 8px 12px;
-  }
-`;
 export const SubmitBtn = styled(Button)`
   width: 100%;
   margin-top: 16px;

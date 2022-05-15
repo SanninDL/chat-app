@@ -9,15 +9,13 @@ import ChatProvider from "./providers/ChatProvider";
 export default function App() {
   return (
     <ChatProvider>
-      <>
-        <BrowserRouter>
-          <Routes>
-            <Route path='login' element={<LoginPage />} />
-            <Route path='register' element={<RegisterPage />} />
-            <Route path='' element={<ChatPage />} />
-          </Routes>
-        </BrowserRouter>
-      </>
+      <BrowserRouter>
+        <Routes>
+          <Route path='login' element={<LoginPage />} />
+          <Route path='register' element={<RegisterPage />} />
+          <Route path='' element={<ChatPage />} />
+        </Routes>
+      </BrowserRouter>
     </ChatProvider>
   );
 }

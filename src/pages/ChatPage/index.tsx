@@ -1,19 +1,22 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { ChatSidebarContainer } from "../../containers/ChatSidebarContainer";
 import { NavGroupContainer } from "../../containers/NavGroupContainer";
+import { SidebarContainer } from "../../containers/SidebarContainer";
+import useThemeContext from "../../hooks/useThemeContext";
 
-const ChatWrap = styled.div`
+const ChatWrap = styled("div")<ThemeProps>`
   display: flex;
   width: 100vw;
   height: 100vh;
+  background-color: ${(props) => props.theme.bgColor};
 `;
 
 export default function Chatpage() {
+  const theme = useThemeContext();
   return (
-    <ChatWrap>
+    <ChatWrap theme={theme}>
       <NavGroupContainer />
-      <ChatSidebarContainer />
+      <SidebarContainer />
     </ChatWrap>
   );
 }

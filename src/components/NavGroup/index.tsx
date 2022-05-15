@@ -12,8 +12,11 @@ import {
   Tooltip
 } from "@mui/material";
 import React, { MouseEvent, useState } from "react";
+import logoBlackSrc from "../../assets/images/logo.png";
 import logoSrc from "../../assets/images/logo-light.png";
+import { darkTheme, lightTheme } from "../../helpers/theme";
 import useChatContext from "../../hooks/useChatContext";
+import useThemeContext from "../../hooks/useThemeContext";
 import { Logo, NavWrap, TabItemButton, ThemeButton } from "./styled";
 
 interface TabList {
@@ -30,23 +33,23 @@ const user = {
 const tabList: Array<TabList> = [
   {
     id: 0,
-    icon: <ChatOutlinedIcon />,
+    icon: <ChatOutlinedIcon fontSize='small' />,
     markcolor: "rgb(255, 184, 34)",
     title: "Chats"
   },
   {
     id: 1,
-    icon: <PersonIcon />,
+    icon: <PersonIcon fontSize='small' />,
     title: "Friends"
   },
   {
     id: 2,
-    icon: <StarBorderIcon />,
+    icon: <StarBorderIcon fontSize='small' />,
     title: "Favorites"
   },
   {
     id: 3,
-    icon: <InventoryIcon />,
+    icon: <InventoryIcon fontSize='small' />,
     title: "Archived"
   }
 ];
@@ -55,7 +58,7 @@ export const NavGroup = () => {
   const { tabActive, setTabActive, darkMode, setDarkMode } = useChatContext();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
+  const theme = useThemeContext();
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -68,14 +71,22 @@ export const NavGroup = () => {
     }
   };
   return (
-    <NavWrap>
+    <NavWrap theme={darkMode ? darkTheme : lightTheme}>
       <Logo>
-        <img src={logoSrc} alt='logo' />
+        <img src={darkMode ? logoSrc : logoBlackSrc} alt='logo' />
       </Logo>
       {tabList.map((tab) => (
         <Tooltip title={tab.title} placement='right' key={tab.id}>
           <TabItemButton
-            variant={tab.id === tabActive ? "contained" : "text"}
+            theme={theme}
+            sx={
+              tab.id === tabActive
+                ? {
+                    backgroundColor: theme.tabActiveBg,
+                    color: theme.tabActiveColor
+                  }
+                : {}
+            }
             onClick={() => setTabActive?.(tab.id)}
           >
             {tab.icon}
@@ -83,7 +94,7 @@ export const NavGroup = () => {
         </Tooltip>
       ))}
 
-      <ThemeButton onClick={() => setDarkMode?.(!darkMode)}>
+      <ThemeButton theme={theme} onClick={() => setDarkMode?.(!darkMode)}>
         <DarkModeOutlinedIcon color={darkMode ? "warning" : "primary"} />
       </ThemeButton>
       <Button onClick={handleClickAvatar}>

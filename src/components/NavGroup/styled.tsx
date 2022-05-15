@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 
-export const NavWrap = styled.div`
+export const NavWrap = styled("div")<ThemeProps>`
   width: 100px;
-  color: "rgba(255,255,255,0.5)";
-  background-color: #1a2236;
+  color: ${(props) => props.theme.color};
 
   display: flex;
   flex-direction: column;
@@ -12,6 +11,8 @@ export const NavWrap = styled.div`
   padding: 15px 0;
 
   overflow: hidden;
+
+  border-right: 1px solid ${(props) => props.theme.borderColor}; // dark mode
 `;
 export const Logo = styled.div`
   width: 30px;
@@ -23,11 +24,12 @@ export const Logo = styled.div`
     object-fit: contain;
   }
 `;
-export const TabItemButton = styled(Button)`
+export const TabItemButton = styled(Button)<ThemeProps>`
   width: 60px;
+  min-width: 60px;
   height: 48px;
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.75);
+  color: ${(props) => props.theme.tabColor};
   display: flex;
   align-items: center;
   justify-content: center;

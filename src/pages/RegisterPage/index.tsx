@@ -3,10 +3,10 @@ import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import { CustomTextField } from "../../helpers/globalStyles";
 import {
   AuthBottom,
   AuthWrap,
-  CustomTextField,
   Form,
   FormWrap,
   Heading,

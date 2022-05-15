@@ -4,11 +4,11 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { authAction } from "../../axios/authAction";
+import { CustomTextField } from "../../helpers/globalStyles";
 import { chatContext } from "../../providers/ChatProvider";
 import {
   AuthBottom,
   AuthWrap,
-  CustomTextField,
   Form,
   FormWrap,
   Heading,
