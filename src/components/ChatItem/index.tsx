@@ -53,7 +53,7 @@ export const ChatItem = ({
         <p>{previewText}</p>
       </Content>
       <Action theme={theme}>
-        <p>{time}</p>
+        <p style={unReadCount !== 0 ? { color: "#0a80ff" } : {}}>{time}</p>
         <Button onClick={handleClickMore}>
           <MoreHorizIcon />
         </Button>

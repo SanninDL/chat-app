@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { Chat } from "../../containers/Chat";
 import { NavGroupContainer } from "../../containers/NavGroupContainer";
 import { SidebarContainer } from "../../containers/SidebarContainer";
 import useThemeContext from "../../hooks/useThemeContext";
@@ -17,6 +18,7 @@ export default function Chatpage() {
     <ChatWrap theme={theme}>
       <NavGroupContainer />
       <SidebarContainer />
+      <Chat />
     </ChatWrap>
   );
 }
