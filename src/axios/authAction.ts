@@ -3,30 +3,37 @@ import axiosClient from "./axiosClient";
 interface LoginData {
     email: string;
     password: string;
-    remember: boolean
 };
+interface LoginAccessData {
+    accessToken: string;
+}
 interface RegisterData {
     email: string;
     password: string;
-    userName: string
+    userName: string;
 };
 
-interface DataLoginResponse {
-    accessToken: string;
-}
-interface LoginResponse {
-    isSucces: boolean;
-    data?: DataLoginResponse;
-}
+
+
 
 export const authAction = {
     login: async (payload: LoginData) => {
-        const url = '/login'
-        const { data } = await axiosClient.post<LoginResponse>(url, { ...payload })
-        return data
+        const url = '/login';
+        const { data } = await axiosClient.post<LoginResponse | LoginFailed>(url, { ...payload });
+        return data;
+    },
+    loginWithAccessToken: async (payload: LoginAccessData) => {
+        const url = '/login-with-access-token';
+        const { data } = await axiosClient.post<LoginTokenResponse | LoginFailed>(url, { ...payload });
+        return data;
     },
     register: (data: RegisterData) => {
-        const url = '/register'
-        return axiosClient.post(url, { ...data })
+        const url = '/register';
+        return axiosClient.post(url, { ...data });
+    },
+    refreshToken: async (refreshToken: string) => {
+        const url = '/refresh-token';
+        const data = await axiosClient.post(url, { refreshToken });
+        return data;
     }
-}
+};

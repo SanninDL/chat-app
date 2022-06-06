@@ -1,5 +1,4 @@
 import React from "react";
-import useThemeContext from "../../hooks/useThemeContext";
 import { ControlWrap, HeaderWrap, Title } from "./styled";
 
 interface HeaderBarProps {
@@ -8,11 +7,10 @@ interface HeaderBarProps {
 }
 
 export const HeaderBar = ({ title, control }: HeaderBarProps) => {
-  const theme = useThemeContext();
   return (
     <HeaderWrap>
-      <Title theme={theme}>{title}</Title>
-      <ControlWrap theme={theme}>{control}</ControlWrap>
+      <Title>{title}</Title>
+      <ControlWrap>{control}</ControlWrap>
     </HeaderWrap>
   );
 };

@@ -1,7 +1,6 @@
-import styled from "@emotion/styled";
-import { Button, TextField } from "@mui/material";
+import { Button, styled } from "@mui/material";
 
-export const AuthWrap = styled.div`
+export const AuthWrap = styled("div")`
   border: 1px solid #e6e6e6;
   position: relative;
   width: 450px;
@@ -9,13 +8,13 @@ export const AuthWrap = styled.div`
   margin-top: 60px;
   padding: 48px;
 `;
-export const Heading = styled.div`
+export const Heading = styled("div")`
   font-size: 20px;
   font-weight: 500;
   text-align: center;
   margin-bottom: 32px;
 `;
-export const LogoWrap = styled.div`
+export const LogoWrap = styled("div")`
   position: absolute;
   top: 0;
   left: 50%;
@@ -30,10 +29,10 @@ export const LogoWrap = styled.div`
     object-fit: contain;
   }
 `;
-export const FormWrap = styled.div`
+export const FormWrap = styled("div")`
   padding: 16px 0;
 `;
-export const Form = styled.form`
+export const Form = styled("form")`
   display: flex;
   flex-direction: column;
 `;
@@ -41,7 +40,7 @@ export const SubmitBtn = styled(Button)`
   width: 100%;
   margin-top: 16px;
 `;
-export const AuthBottom = styled.div`
+export const AuthBottom = styled("div")`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;

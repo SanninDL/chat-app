@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 
-export const SidebarBody = styled.div`
+export const SidebarBody = styled("div")`
   flex: 1;
 `;

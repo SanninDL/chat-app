@@ -1,11 +1,9 @@
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
-import { authAction } from "../../axios/authAction";
-import { CustomTextField } from "../../helpers/globalStyles";
-import { chatContext } from "../../providers/ChatProvider";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import {
   AuthBottom,
   AuthWrap,
@@ -15,96 +13,113 @@ import {
   LogoWrap,
   SubmitBtn
 } from "./styled";
-
-interface FormValues {
-  email: string;
-  password: string;
-  remember: boolean;
-}
+import { authAction } from "../../axios/authAction";
+import {
+  removeLocalStorage,
+  setLocalStorageToken
+} from "../../helpers/localStorage";
+import { userAction } from "../../redux/userSlice";
+import { CustomTextField, ErrorMessage } from "../../styles/globalStyles";
+import {
+  ACCESS_TOKEN_LOCAL_STORAGE_KEY,
+  REFRESH_TOKEN_LOCAL_STORAGE_KEY
+} from "../../constant/common";
+import { useAppDispatch } from "../../redux/store";
 
 export default function LoginPage() {
+  const [error, setError] = useState<string>("");
+
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       email: "",
-      password: "",
-      remember: false
+      password: ""
     }
   });
+
   const navigation = useNavigate();
-  const store = useContext(chatContext);
-  // const {setUser} = store
+  const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<FormValues> = async (loginInfo) => {
     console.log("submit ", loginInfo);
     try {
       const res = await authAction.login(loginInfo);
-      console.log("res ", res);
-      console.log("store ", store);
-      if (res.isSucces) {
+      if (res.isSuccess && res.data) {
+        const { user, accessToken, refreshToken } = res.data;
+
+        dispatch(userAction.setUser(user));
+        setLocalStorageToken(accessToken, ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+        setLocalStorageToken(refreshToken, REFRESH_TOKEN_LOCAL_STORAGE_KEY);
+
         navigation("/");
+      }
+      if (!res.isSuccess) {
+        console.log("mat khau sai");
+        setError("Email or password are not correct");
       }
     } catch (error) {
       console.log("error", error);
     }
   };
 
+  useEffect(() => {
+    removeLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+    removeLocalStorage(REFRESH_TOKEN_LOCAL_STORAGE_KEY);
+    dispatch(userAction.removeUser());
+  }, []);
   return (
-    <div>
-      <AuthWrap>
-        <LogoWrap>
-          <img src={logo} alt='Logo' />
-        </LogoWrap>
-        <Heading>Sign In</Heading>
-        <FormWrap>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name='email'
-              control={control}
-              render={({ field }) => (
-                <CustomTextField type='text' {...field} placeholder='Email' />
-              )}
-            />
-            <Controller
-              name='password'
-              control={control}
-              render={({ field }) => (
-                <CustomTextField
-                  type='password'
-                  {...field}
-                  placeholder='Password'
-                />
-              )}
-            />
+    <AuthWrap>
+      <LogoWrap>
+        <img src={logo} alt='Logo' />
+      </LogoWrap>
+      <Heading>Sign In</Heading>
+      <FormWrap>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name='email'
+            control={control}
+            render={({ field }) => (
+              <CustomTextField
+                sx={{
+                  "& .MuiOutlinedInput-root input": {
+                    color: "#495057!important"
+                  }
+                }}
+                type='text'
+                {...field}
+                placeholder='Email'
+              />
+            )}
+          />
+          <Controller
+            name='password'
+            control={control}
+            render={({ field }) => (
+              <CustomTextField
+                sx={{
+                  "& .MuiOutlinedInput-root input": {
+                    color: "#495057!important"
+                  }
+                }}
+                type='password'
+                {...field}
+                placeholder='Password'
+              />
+            )}
+          />
 
-            <Controller
-              name='remember'
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  sx={{
-                    "& .MuiCheckbox-root ": {
-                      padding: "0 8px"
-                    }
-                  }}
-                  {...field}
-                  control={<Checkbox />}
-                  label='Remember me'
-                />
-              )}
-            />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
 
-            <SubmitBtn type='submit' variant='contained'>
-              Sign In
-            </SubmitBtn>
-          </Form>
-        </FormWrap>
-        <AuthBottom>
-          <p>Don't have an account?</p>
-          <Button variant='outlined' size='small'>
-            <Link to='/register'>Register now!</Link>
-          </Button>
-        </AuthBottom>
-      </AuthWrap>
-    </div>
+          <SubmitBtn type='submit' variant='contained'>
+            Sign In
+          </SubmitBtn>
+        </Form>
+      </FormWrap>
+      <AuthBottom>
+        <p>Don't have an account?</p>
+        <Button variant='outlined' size='small'>
+          <Link to='/register'>Register now!</Link>
+        </Button>
+      </AuthBottom>
+    </AuthWrap>
   );
 }

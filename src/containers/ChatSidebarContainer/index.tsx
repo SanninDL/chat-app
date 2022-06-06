@@ -1,35 +1,59 @@
+import React, { useEffect, useMemo } from "react";
+import { format } from "fecha";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import GroupIcon from "@mui/icons-material/Group";
-import { Button } from "@mui/material";
-import React from "react";
 import { ChatItem } from "../../components/ChatItem";
 import { HeaderBar } from "../../components/HeaderBar";
 import { SearchChat } from "../../components/SearchChat";
+
+import { CustomButton } from "../../styles/globalStyles";
 import { SidebarBody } from "./styled";
+
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { selectRoom } from "../../redux/chatSlice";
 
 const url =
   "https://slek.laborasyon.com/demos/dark/dist/media/img/man_avatar1.jpg";
-const Control = () => {
-  return (
-    <>
-      <Button sx={{ marginLeft: "10px" }} variant='outlined'>
-        <GroupIcon />
-      </Button>
-      <Button sx={{ marginLeft: "10px" }} variant='outlined'>
-        <AddCircleOutlineIcon />
-      </Button>
-    </>
-  );
-};
+
+type format = (date: Date, format?: string) => string;
 
 export const ChatSidebarContainer = () => {
-  const chatItemProps = {
-    userName: "Duyen",
-    isOnline: true,
-    avatar: url,
-    unReadCount: 3,
-    previewText: "What's up, how are you?",
-    time: "03:41 PM"
+  const { rooms } = useAppSelector((state) => state.chat);
+  const dispatch = useAppDispatch();
+
+  const chatItems = useMemo(() => {
+    if (!rooms.length) return [];
+
+    return rooms.map((room) => {
+      return {
+        roomId: room.roomId,
+        roomName: room.roomName,
+        avatar: room.roomAvatar,
+        unReadCount: room.unReadMessages.length || 0,
+        lastMessage: room.lastMessage.messageText,
+        // time: format(room.lastMessage.createdAt, "hh::mm::ss",),
+        time: format(new Date(room.lastMessage.createdAt), "hh:mm A"),
+        isOnline: true
+      };
+    });
+  }, [rooms]);
+
+  const handleChangeRoom = (roomId: number) => {
+    dispatch(selectRoom(roomId));
+  };
+
+  const Control = () => {
+    return (
+      <>
+        <CustomButton>
+          <GroupIcon />
+        </CustomButton>
+        <CustomButton>
+          <AddCircleOutlineIcon />
+        </CustomButton>
+      </>
+    );
   };
 
   return (
@@ -37,7 +61,9 @@ export const ChatSidebarContainer = () => {
       <HeaderBar title='Chats' control={<Control />} />
       <SearchChat />
       <SidebarBody>
-        <ChatItem {...chatItemProps} />
+        {chatItems.map((item, index) => (
+          <ChatItem {...item} key={index} handleChangeRoom={handleChangeRoom} />
+        ))}
       </SidebarBody>
     </>
   );

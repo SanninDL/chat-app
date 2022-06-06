@@ -1,20 +1,26 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 
-export const HeaderChatWrap = styled.div`
+export const HeaderChatWrap = styled("div")`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 15px 30px;
+  border-bottom: 1px solid ${(props) => props.theme.custom.borderColor};
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 `;
 
-export const HeaderInfo = styled.div<ThemeProps>`
+export const HeaderInfo = styled("div")`
   display: flex;
   align-items: center;
   gap: 0 10px;
   h5 {
     font-size: 16px;
     font-weight: 600;
-    color: ${(props) => props.theme.color};
+    color: ${(props) => props.theme.custom.color};
     margin-bottom: 4px;
   }
   p {
@@ -24,12 +30,12 @@ export const HeaderInfo = styled.div<ThemeProps>`
   }
 `;
 
-export const HeaderAction = styled.div<ThemeProps>`
+export const HeaderAction = styled("div")`
   display: flex;
   align-items: center;
   button {
     padding: 8px 14px;
-    color: ${(props) => props.theme.color};
-    border-color: ${(props) => props.theme.borderColor};
+    color: ${(props) => props.theme.custom.color};
+    border-color: ${(props) => props.theme.custom.borderColor};
   }
 `;

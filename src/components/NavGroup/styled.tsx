@@ -1,9 +1,8 @@
-import styled from "@emotion/styled";
-import { Button } from "@mui/material";
+import { Button, styled } from "@mui/material";
 
-export const NavWrap = styled("div")<ThemeProps>`
+export const NavWrap = styled("div")`
   width: 100px;
-  color: ${(props) => props.theme.color};
+  color: ${(props) => props.theme.custom.color};
 
   display: flex;
   flex-direction: column;
@@ -12,9 +11,9 @@ export const NavWrap = styled("div")<ThemeProps>`
 
   overflow: hidden;
 
-  border-right: 1px solid ${(props) => props.theme.borderColor}; // dark mode
+  border-right: 1px solid ${(props) => props.theme.custom.borderColor}; // dark mode
 `;
-export const Logo = styled.div`
+export const Logo = styled("div")`
   width: 30px;
   height: 80px;
   flex-shrink: 0;
@@ -24,12 +23,12 @@ export const Logo = styled.div`
     object-fit: contain;
   }
 `;
-export const TabItemButton = styled(Button)<ThemeProps>`
+export const TabItemButton = styled(Button)`
   width: 60px;
   min-width: 60px;
   height: 48px;
   border-radius: 6px;
-  color: ${(props) => props.theme.tabColor};
+  color: ${(props) => props.theme.custom.tabColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +40,7 @@ export const ThemeButton = styled(TabItemButton)`
   flex-shrink: 0;
 `;
 
-export const UserIcon = styled.div`
+export const UserIcon = styled("div")`
   padding: 15px 0;
   flex-shrink: 0;
 `;

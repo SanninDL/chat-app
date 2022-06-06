@@ -1,25 +1,22 @@
-import React, { useState } from "react";
-import { Avatar, Button, Divider, Menu, MenuItem } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
+import { Avatar, Divider, Menu, MenuItem } from "@mui/material";
+import React, { useState } from "react";
+import defaultAvatar from "../../assets/images/default-avatar.png";
+import { CustomButton } from "../../styles/globalStyles";
 import { HeaderAction, HeaderChatWrap, HeaderInfo } from "./styled";
 
-import defaultAvatar from "../../assets/images/default-avatar.png";
-import useThemeContext from "../../hooks/useThemeContext";
-
-interface UserValue {
-  displayName: string;
+interface RoomValue {
+  roomName: string;
   avatar: string;
 }
 interface ChatHeaderProps {
-  user: UserValue;
+  room: RoomValue;
 }
 
-export const ChatHeader = ({ user }: ChatHeaderProps) => {
+export const ChatHeader = ({ room }: ChatHeaderProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const theme = useThemeContext();
-  const { displayName, avatar } = user;
+  const { roomName, avatar } = room;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (anchorEl) {
@@ -34,17 +31,16 @@ export const ChatHeader = ({ user }: ChatHeaderProps) => {
 
   return (
     <HeaderChatWrap>
-      <HeaderInfo theme={theme}>
+      <HeaderInfo>
         <Avatar src={avatar || defaultAvatar}></Avatar>
         <div>
-          <h5>{displayName}</h5>
-          <p>writing...</p>
+          <h5>{roomName}</h5>
         </div>
       </HeaderInfo>
-      <HeaderAction theme={theme}>
-        <Button variant='outlined' onClick={handleClick}>
+      <HeaderAction>
+        <CustomButton onClick={handleClick}>
           <MoreHorizIcon />
-        </Button>
+        </CustomButton>
         <Menu
           open={Boolean(anchorEl)}
           onClose={handleClose}

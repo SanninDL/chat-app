@@ -1,3 +1,5 @@
+import React, { MouseEvent, useState } from "react";
+
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -9,15 +11,16 @@ import {
   Divider,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  useTheme
 } from "@mui/material";
-import React, { MouseEvent, useState } from "react";
-import logoBlackSrc from "../../assets/images/logo.png";
-import logoSrc from "../../assets/images/logo-light.png";
-import { darkTheme, lightTheme } from "../../helpers/theme";
-import useChatContext from "../../hooks/useChatContext";
-import useThemeContext from "../../hooks/useThemeContext";
 import { Logo, NavWrap, TabItemButton, ThemeButton } from "./styled";
+import logoSrc from "../../assets/images/logo-light.png";
+import logoBlackSrc from "../../assets/images/logo.png";
+import defaultAvatar from "../../assets/images/default-avatar.png";
+
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { setTabActive, setMode } from "../../redux/appSlice";
 
 interface TabList {
   id: number;
@@ -25,11 +28,7 @@ interface TabList {
   markcolor?: string;
   title: string;
 }
-const user = {
-  name: "Duyen",
-  avatar:
-    "https://slek.laborasyon.com/demos/dark/dist/media/img/women_avatar5.jpg"
-};
+
 const tabList: Array<TabList> = [
   {
     id: 0,
@@ -54,11 +53,19 @@ const tabList: Array<TabList> = [
   }
 ];
 
-export const NavGroup = () => {
-  const { tabActive, setTabActive, darkMode, setDarkMode } = useChatContext();
+interface NavGroupProps {
+  handleLogOut: () => void;
+}
 
+export const NavGroup = ({ handleLogOut }: NavGroupProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const theme = useThemeContext();
+
+  const { tabActive, mode } = useAppSelector((state) => state.app);
+  const { user } = useAppSelector((state) => state.user);
+
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -71,34 +78,35 @@ export const NavGroup = () => {
     }
   };
   return (
-    <NavWrap theme={darkMode ? darkTheme : lightTheme}>
+    <NavWrap>
       <Logo>
-        <img src={darkMode ? logoSrc : logoBlackSrc} alt='logo' />
+        <img src={mode === "dark" ? logoSrc : logoBlackSrc} alt='logo' />
       </Logo>
       {tabList.map((tab) => (
         <Tooltip title={tab.title} placement='right' key={tab.id}>
           <TabItemButton
-            theme={theme}
             sx={
               tab.id === tabActive
                 ? {
-                    backgroundColor: theme.tabActiveBg,
-                    color: theme.tabActiveColor
+                    backgroundColor: theme.custom.tabActiveBg,
+                    color: theme.custom.tabActiveColor
                   }
                 : {}
             }
-            onClick={() => setTabActive?.(tab.id)}
+            onClick={() => dispatch(setTabActive(tab.id))}
           >
             {tab.icon}
           </TabItemButton>
         </Tooltip>
       ))}
 
-      <ThemeButton theme={theme} onClick={() => setDarkMode?.(!darkMode)}>
-        <DarkModeOutlinedIcon color={darkMode ? "warning" : "primary"} />
+      <ThemeButton
+        onClick={() => dispatch(setMode(mode === "dark" ? "light" : "dark"))}
+      >
+        <DarkModeOutlinedIcon color={mode === "dark" ? "warning" : "primary"} />
       </ThemeButton>
       <Button onClick={handleClickAvatar}>
-        <Avatar alt={user.name} src={user.avatar} />
+        <Avatar alt={user.userName} src={user.avatar || defaultAvatar} />
       </Button>
       <Menu
         onClose={handleClose}
@@ -109,7 +117,7 @@ export const NavGroup = () => {
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose} sx={{ color: "#fd397a" }}>
+        <MenuItem onClick={handleLogOut} sx={{ color: "#fd397a" }}>
           Logout
         </MenuItem>
       </Menu>

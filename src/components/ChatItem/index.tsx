@@ -1,29 +1,40 @@
-import { Avatar, Badge, Button, Menu, MenuItem, Divider } from "@mui/material";
-import React, { useState } from "react";
-import useThemeContext from "../../hooks/useThemeContext";
-import { Action, ChatItemWrap, Content, UnReadCount } from "./styled";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Divider,
+  Menu,
+  MenuItem,
+  useTheme
+} from "@mui/material";
+import React, { useState } from "react";
+import { Action, ChatItemWrap, Content, UnReadCount } from "./styled";
 
 interface ChatItemProps {
   avatar: string | null;
-  userName: string;
-  previewText: string;
-  unReadCount: number;
-  time: string;
   isOnline: boolean;
+  lastMessage: string;
+  unReadCount: number;
+  roomName: string;
+  roomId: number;
+  time: string;
+  handleChangeRoom: (roomId: number) => void;
 }
 
 export const ChatItem = ({
-  userName,
+  roomName,
+  roomId,
   avatar,
-  isOnline,
-  previewText,
+  lastMessage,
   unReadCount,
-  time
+  time,
+  isOnline = false,
+  handleChangeRoom
 }: ChatItemProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const theme = useThemeContext();
+  const theme = useTheme();
 
   const handleClickMore = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (anchorEl) {
@@ -35,26 +46,39 @@ export const ChatItem = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  console.log("");
 
   return (
-    <ChatItemWrap>
-      <div style={{ width: "20px" }}>
-        {unReadCount !== 0 && <UnReadCount>3</UnReadCount>}
-      </div>
+    <ChatItemWrap onClick={() => handleChangeRoom(roomId)}>
+      {/* <div style={{ width: "20px" }}>
+      </div> */}
+      {unReadCount !== 0 && <UnReadCount>{unReadCount}</UnReadCount>}
+
       <Badge color='success' variant='dot' invisible={isOnline}>
-        <Avatar alt={userName} src={avatar ? avatar : ""}>
-          {!avatar && userName.slice(0, 1)}
+        <Avatar
+          alt={roomName}
+          sx={{ height: "35px", width: "35px" }}
+          src={avatar ? avatar : ""}
+        >
+          {!avatar && roomName.slice(0, 1)}
         </Avatar>
       </Badge>
-      <Content theme={theme}>
+      <Content>
         <h5 style={unReadCount !== 0 ? { color: "#0a80ff" } : {}}>
-          {userName}
+          {roomName}
         </h5>
-        <p>{previewText}</p>
+        <p>{lastMessage}</p>
       </Content>
-      <Action theme={theme}>
+      <Action>
         <p style={unReadCount !== 0 ? { color: "#0a80ff" } : {}}>{time}</p>
-        <Button onClick={handleClickMore}>
+        <Button
+          onClick={handleClickMore}
+          sx={
+            !unReadCount
+              ? { color: theme.custom.tabColor }
+              : { color: "#0a80ff" }
+          }
+        >
           <MoreHorizIcon />
         </Button>
 

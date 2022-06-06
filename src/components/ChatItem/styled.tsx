@@ -1,13 +1,16 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 
-export const ChatItemWrap = styled.div`
+export const ChatItemWrap = styled("div")`
   display: flex;
   align-items: center;
-  padding: 17px 30px;
+  padding: 15px 30px 15px 40px;
   gap: 0 16px;
+  position: relative;
+
+  border-bottom: 1px solid ${(props) => props.theme.custom.borderColor};
 `;
 
-export const UnReadCount = styled.div`
+export const UnReadCount = styled("div")`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,27 +20,33 @@ export const UnReadCount = styled.div`
   height: 20px;
   border-radius: 50%;
   font-size: 11px;
+
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
-export const Content = styled("div")<ThemeProps>`
+export const Content = styled("div")`
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   h5 {
     font-size: 16px;
-    color: ${(props) => props.theme.color};
+    color: ${(props) => props.theme.custom.color};
     margin-bottom: 5px;
   }
   p {
-    color: ${(props) => props.theme.textGray};
+    color: ${(props) => props.theme.custom.textGray};
   }
 `;
-export const Action = styled("div")<ThemeProps>`
+export const Action = styled("div")`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   p {
-    color: ${(props) => props.theme.textGray};
+    color: ${(props) => props.theme.custom.textGray};
     font-size: 11px;
   }
 `;

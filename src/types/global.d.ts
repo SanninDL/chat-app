@@ -1,7 +1,7 @@
 export { };
 
 declare global {
-
+    // THEME
     interface ThemeValueProps {
         color: string;
         borderColor: string;
@@ -12,8 +12,31 @@ declare global {
         tabActiveColor: string;
         inputColor: string;
         inputBorder: string;
+        messageBg: string;
+        reciveMessageBg: string;
+        messageTextColor: string;
+        reciveMessageTextColor: string;
     }
     interface ThemeProps {
         theme?: ThemeValueProps;
     }
+
+    //global style 
+    interface FlexBoxProps {
+        alignItems?: string;
+        justifyContent?: string;
+        gap?: string;
+    }
+
+    // Chat
+    interface Message {
+        messageText: string;
+        senderId: number;
+        createAt: Date;
+        isRead: boolean | false;
+    }
+
+
+    // axios 
+
 }
