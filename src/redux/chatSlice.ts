@@ -6,12 +6,12 @@ interface ChatState {
     rooms: Room[],
     messages: Message[];
     loading: boolean;
-    currentRoomId: string;
+    currentRoomId: number;
 }
 
 const initialState: ChatState = {
     rooms: [],
-    currentRoomId: '',
+    currentRoomId: 0,
     messages: [],
     loading: false
 };
@@ -25,21 +25,29 @@ const chatSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchRooms.fulfilled, (state, action) => {
-            console.log('payload ', action.payload);
-            state.rooms = action.payload;
-            state.loading = false;
+        builder
+            .addCase(fetchRooms.fulfilled, (state, action) => {
+                state.rooms = action.payload;
+                state.loading = false;
 
-        })
+            })
             .addCase(fetchRooms.pending, (state, action) => {
                 state.loading = true;
+            })
+            .addCase(fetchMessages.fulfilled, (state, action) => {
+                state.messages = action.payload;
             });
     }
 });
-export const fetchRooms = createAsyncThunk('chat/fetchRoom', async (userId: string) => {
+export const fetchRooms = createAsyncThunk('chat/fetchRoom', async (userId: number) => {
     const { data } = await chatAction.getRooms(userId);
-    console.log('res rooms ', data.data.rooms);
     return data.data.rooms;
+});
+export const fetchMessages = createAsyncThunk('chat/fetchMessages', async (roomId: number) => {
+    const { data } = await chatAction.getMessages(roomId);
+
+    return data.data.messages;
+
 });
 
 export const { selectRoom } = chatSlice.actions;

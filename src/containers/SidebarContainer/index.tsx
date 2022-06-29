@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { styled } from "@mui/material";
-import { useAppSelector } from "../../redux/store";
+import { useGetAppState } from "../../redux/store";
 import { ChatSidebarContainer } from "../ChatSidebarContainer";
 
 export const SidebarWrap = styled("div")`
@@ -10,7 +10,7 @@ export const SidebarWrap = styled("div")`
   overflow: hidden;
 `;
 export const SidebarContainer = () => {
-  const { tabActive } = useAppSelector((state) => state.app);
+  const { tabActive } = useGetAppState();
 
   const renderTab = useMemo(() => {
     switch (tabActive) {

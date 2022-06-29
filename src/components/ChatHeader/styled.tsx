@@ -6,11 +6,6 @@ export const HeaderChatWrap = styled("div")`
   justify-content: space-between;
   padding: 15px 30px;
   border-bottom: 1px solid ${(props) => props.theme.custom.borderColor};
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
 `;
 
 export const HeaderInfo = styled("div")`

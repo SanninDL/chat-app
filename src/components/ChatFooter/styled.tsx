@@ -1,11 +1,6 @@
 import { styled } from "@mui/material";
 
 export const ChatFooterWrap = styled("div")`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
   gap: 0;
 
   background-color: ${(props) => props.theme.custom.bgColor};

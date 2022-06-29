@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface initialState {
     mode: string;
     tabActive: number;
+    error: string;
 }
 
 const initialState = {
     mode: 'dark',
     tabActive: 0,
+    error: ''
 };
 
 const appSlice = createSlice({

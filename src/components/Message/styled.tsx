@@ -3,6 +3,7 @@ import { styled } from "@mui/material";
 export const MessageWrap = styled("div")`
   display: flex;
   flex-direction: column;
+  margin: 2px 0;
 `;
 export const UserWrap = styled("div")`
   display: flex;
@@ -27,7 +28,7 @@ export const Info = styled("div")`
 `;
 export const Message = styled("div")`
   padding: 10px 20px;
-  border-radius: 7px;
+  border-radius: 20px;
   font-size: 14px;
 `;
 

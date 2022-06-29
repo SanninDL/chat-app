@@ -1,5 +1,9 @@
 import React, { MouseEvent, useState } from "react";
 
+import defaultAvatar from "../../assets/images/default-avatar.png";
+import logoSrc from "../../assets/images/logo-light.png";
+import logoBlackSrc from "../../assets/images/logo.png";
+
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -15,12 +19,13 @@ import {
   useTheme
 } from "@mui/material";
 import { Logo, NavWrap, TabItemButton, ThemeButton } from "./styled";
-import logoSrc from "../../assets/images/logo-light.png";
-import logoBlackSrc from "../../assets/images/logo.png";
-import defaultAvatar from "../../assets/images/default-avatar.png";
 
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { setTabActive, setMode } from "../../redux/appSlice";
+import { setMode, setTabActive } from "../../redux/appSlice";
+import {
+  useGetAppState,
+  useGetUserState,
+  useAppDispatch
+} from "../../redux/store";
 
 interface TabList {
   id: number;
@@ -60,8 +65,8 @@ interface NavGroupProps {
 export const NavGroup = ({ handleLogOut }: NavGroupProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const { tabActive, mode } = useAppSelector((state) => state.app);
-  const { user } = useAppSelector((state) => state.user);
+  const { tabActive, mode } = useGetAppState();
+  const { user } = useGetUserState();
 
   const theme = useTheme();
   const dispatch = useAppDispatch();

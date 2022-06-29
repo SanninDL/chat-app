@@ -29,5 +29,5 @@ declare interface User {
     email: string;
     userName: string;
     avatar: string;
-    userId: string;
+    userId: number;
 }

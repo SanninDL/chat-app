@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   Avatar,
@@ -8,8 +10,9 @@ import {
   MenuItem,
   useTheme
 } from "@mui/material";
-import React, { useState } from "react";
 import { Action, ChatItemWrap, Content, UnReadCount } from "./styled";
+
+import { useGetChatState } from "../../redux/store";
 
 interface ChatItemProps {
   avatar: string | null;
@@ -27,13 +30,14 @@ export const ChatItem = ({
   roomId,
   avatar,
   lastMessage,
-  unReadCount,
+  unReadCount: unReadCountProp,
   time,
   isOnline = false,
   handleChangeRoom
 }: ChatItemProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
+  const [unReadCount, setUnReadCount] = useState<number>(unReadCountProp);
+  const { currentRoomId } = useGetChatState();
   const theme = useTheme();
 
   const handleClickMore = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,10 +50,20 @@ export const ChatItem = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log("");
+  const onChangeRoom = () => {
+    handleChangeRoom(roomId);
+    setUnReadCount(0);
+  };
 
   return (
-    <ChatItemWrap onClick={() => handleChangeRoom(roomId)}>
+    <ChatItemWrap
+      onClick={onChangeRoom}
+      sx={
+        roomId === currentRoomId
+          ? { backgroundColor: theme.custom.roomActiveBg }
+          : {}
+      }
+    >
       {/* <div style={{ width: "20px" }}>
       </div> */}
       {unReadCount !== 0 && <UnReadCount>{unReadCount}</UnReadCount>}

@@ -1,15 +1,20 @@
 import { ThemeProvider } from "@mui/material";
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import ChatPage from "./pages/ChatPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { useAppSelector } from "./redux/store";
+import { useGetUserState, useGetAppState, useAppDispatch } from "./redux/store";
+import { userAction } from "./redux/userSlice";
 import { darkTheme, lightTheme } from "./styles/theme";
 
 export default function App() {
-  const { mode } = useAppSelector((state) => state.app);
+  const { mode } = useGetAppState();
+  const { user, logged } = useGetUserState();
+  const dispatch = useAppDispatch();
+
+ 
 
   return (
     <BrowserRouter>

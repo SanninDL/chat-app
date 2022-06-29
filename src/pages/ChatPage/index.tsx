@@ -11,7 +11,7 @@ import { SidebarContainer } from "../../containers/SidebarContainer";
 
 import { getLocalStorage } from "../../helpers/localStorage";
 import { authAction } from "../../axios/authAction";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useGetUserState, useAppDispatch } from "../../redux/store";
 import { userAction } from "../../redux/userSlice";
 import { chatAction } from "../../axios/chatAction";
 import { fetchRooms } from "../../redux/chatSlice";
@@ -23,28 +23,26 @@ const ChatWrap = styled("div")`
 `;
 
 export default function Chatpage() {
-  const { logged, user } = useAppSelector((state) => state.user);
+  const { logged, user } = useGetUserState();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const loginWithAccessToken = async () => {
-    console.log("login with access token");
-    try {
-      const accessToken = getLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
-      if (logged) {
-        return;
+    const accessToken = getLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+
+    if (logged) {
+      return;
+    }
+
+    if (accessToken && !logged) {
+      const res = await authAction.loginWithAccessToken({ accessToken });
+
+      if (res.isSuccess && res.data) {
+        dispatch(userAction.setUser(res.data.user));
       }
-      if (accessToken && !logged) {
-        const res = await authAction.loginWithAccessToken({ accessToken });
-        console.log("res ", res);
-        if (res.isSuccess && res.data) {
-          dispatch(userAction.setUser(res.data.user));
-        }
-      } else {
-        navigate("/login");
-      }
-    } catch (error) {
-      console.log(error);
+    } else {
+      navigate("/login");
     }
   };
 
@@ -53,7 +51,7 @@ export default function Chatpage() {
       try {
         await loginWithAccessToken();
       } catch (error) {
-        console.log("error ", error);
+        navigate("/login");
       }
     })();
   }, []);
@@ -65,8 +63,7 @@ export default function Chatpage() {
       }
     })();
   }, [logged]);
-  const env: string = process.env.REACT_APP_API_DOMAIN || "";
-  console.log("env ", env);
+
   return (
     <ChatWrap>
       <NavGroupContainer />

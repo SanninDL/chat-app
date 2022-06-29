@@ -6,29 +6,25 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   CustomButton,
   CustomButtonPrimary,
-  CustomTextField
+  CustomTextField,
 } from "../../styles/globalStyles";
 import { ChatFooterWrap, ChatForm } from "./styled";
 
-interface FormValue {
-  messageText: string;
-  messageFile: string;
+interface ChatFooterProps {
+  onSubmitFunc: (value: ChatFormValue) => void;
 }
 
-export const ChatFooter = () => {
-  const { control, handleSubmit, reset } = useForm<FormValue>({
+export const ChatFooter = ({ onSubmitFunc }: ChatFooterProps) => {
+  const { control, handleSubmit, reset } = useForm<ChatFormValue>({
     defaultValues: {
       messageText: "",
-      messageFile: ""
-    }
+      messageFile: "",
+    },
   });
 
-  // const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log("event ", event.target.value);
-  // };
-  const onSubmit: SubmitHandler<FormValue> = (value) => {
-    console.log("🚀 ~ value", value);
-    reset();
+  const onSubmit: SubmitHandler<ChatFormValue> = (value) => {
+    console.log("submit ", value);
+    onSubmitFunc(value);
   };
   return (
     <ChatFooterWrap>

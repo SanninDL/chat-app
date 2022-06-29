@@ -10,8 +10,8 @@ import { SearchChat } from "../../components/SearchChat";
 import { CustomButton } from "../../styles/globalStyles";
 import { SidebarBody } from "./styled";
 
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { selectRoom } from "../../redux/chatSlice";
+import { useGetChatState, useAppDispatch } from "../../redux/store";
+import { fetchMessages, selectRoom } from "../../redux/chatSlice";
 
 const url =
   "https://slek.laborasyon.com/demos/dark/dist/media/img/man_avatar1.jpg";
@@ -19,7 +19,7 @@ const url =
 type format = (date: Date, format?: string) => string;
 
 export const ChatSidebarContainer = () => {
-  const { rooms } = useAppSelector((state) => state.chat);
+  const { rooms } = useGetChatState();
   const dispatch = useAppDispatch();
 
   const chatItems = useMemo(() => {
@@ -41,6 +41,7 @@ export const ChatSidebarContainer = () => {
 
   const handleChangeRoom = (roomId: number) => {
     dispatch(selectRoom(roomId));
+    dispatch(fetchMessages(roomId));
   };
 
   const Control = () => {

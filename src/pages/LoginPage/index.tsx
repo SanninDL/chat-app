@@ -53,7 +53,6 @@ export default function LoginPage() {
         navigation("/");
       }
       if (!res.isSuccess) {
-        console.log("mat khau sai");
         setError("Email or password are not correct");
       }
     } catch (error) {

@@ -10,13 +10,11 @@ interface RoomValue {
   avatar: string;
 }
 interface ChatHeaderProps {
-  room: RoomValue;
+  room?: Room;
 }
 
 export const ChatHeader = ({ room }: ChatHeaderProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  const { roomName, avatar } = room;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (anchorEl) {
@@ -32,9 +30,9 @@ export const ChatHeader = ({ room }: ChatHeaderProps) => {
   return (
     <HeaderChatWrap>
       <HeaderInfo>
-        <Avatar src={avatar || defaultAvatar}></Avatar>
+        <Avatar src={room?.roomAvatar || defaultAvatar}></Avatar>
         <div>
-          <h5>{roomName}</h5>
+          <h5>{room?.roomName}</h5>
         </div>
       </HeaderInfo>
       <HeaderAction>

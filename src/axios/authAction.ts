@@ -30,10 +30,5 @@ export const authAction = {
     register: (data: RegisterData) => {
         const url = '/register';
         return axiosClient.post(url, { ...data });
-    },
-    refreshToken: async (refreshToken: string) => {
-        const url = '/refresh-token';
-        const data = await axiosClient.post(url, { refreshToken });
-        return data;
     }
 };

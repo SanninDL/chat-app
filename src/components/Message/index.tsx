@@ -1,6 +1,7 @@
+import React from "react";
+import { DEFAULT_AVATAR } from "../../helpers/constant";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { Avatar } from "@mui/material";
-import React from "react";
 import { FlexBox } from "../../styles/globalStyles";
 import {
   Info,
@@ -10,24 +11,16 @@ import {
   UserWrap
 } from "./styled";
 
+import { format } from "fecha";
+
 interface MessageProps {
-  user: User;
   message: Message;
   isRecive: boolean;
   isSameUser: boolean;
 }
 
-const message = {
-  messageText: "You are good",
-  createdAt: "11:05 AM",
-  isRead: true
-};
-const user = {
-  displayName: "Byrom Guittet"
-};
-
-export const Message = (props: any) => {
-  const { isRecive, isSameUser } = props;
+export const Message = (props: MessageProps) => {
+  const { isRecive, isSameUser, message } = props;
 
   return (
     <MessageWrap
@@ -35,10 +28,13 @@ export const Message = (props: any) => {
     >
       {!isSameUser && (
         <UserWrap>
-          <Avatar sx={{ height: "35px", width: "35px" }}>A</Avatar>
+          <Avatar
+            sx={{ height: "35px", width: "35px" }}
+            src={message.sender.avatar || DEFAULT_AVATAR}
+          ></Avatar>
           <Info>
-            <h5>{user.displayName}</h5>
-            <p>{message.createdAt}</p>
+            <h5>{message.sender.displayName}</h5>
+            <p>{format(new Date(message.createdAt), "D/MM hh:mm A")}</p>
           </Info>
         </UserWrap>
       )}
@@ -46,7 +42,7 @@ export const Message = (props: any) => {
         <ReciveMessageText>{message.messageText}</ReciveMessageText>
       ) : (
         <FlexBox alignItems='flex-end' gap={"0 6px"}>
-          {message.isRead && (
+          {message.isRead === 0 && (
             <CheckCircleOutlinedIcon color='success' fontSize='small' />
           )}
           <MessageText>{message.messageText}</MessageText>

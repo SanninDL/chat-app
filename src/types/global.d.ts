@@ -16,6 +16,7 @@ declare global {
         reciveMessageBg: string;
         messageTextColor: string;
         reciveMessageTextColor: string;
+        roomActiveBg: string;
     }
     interface ThemeProps {
         theme?: ThemeValueProps;
@@ -29,12 +30,7 @@ declare global {
     }
 
     // Chat
-    interface Message {
-        messageText: string;
-        senderId: number;
-        createAt: Date;
-        isRead: boolean | false;
-    }
+
 
 
     // axios 

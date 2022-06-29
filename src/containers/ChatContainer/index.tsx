@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { styled } from "@mui/material";
 
 import { ReactComponent as NoRoomSelectedSvg } from "../../assets/svg/unselected-chat.svg";
@@ -6,11 +6,17 @@ import { ChatFooter } from "../../components/ChatFooter";
 import { ChatHeader } from "../../components/ChatHeader";
 import { Message } from "../../components/Message";
 
-import { useAppSelector } from "../../redux/store";
+import { useGetChatState, useGetUserState } from "../../redux/store";
 
-import { NoRoomSelected } from "./styled";
+import { NoRoomSelected, ChatBody } from "./styled";
+import { initSocket } from "../../socket";
+import { Socket } from "socket.io-client";
+import { MESSAGE_EVENT } from "../../socket/constants";
 
 const Wrap = styled("div")`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: relative;
   flex: 1;
   border-left: 1px solid;
@@ -19,23 +25,54 @@ const Wrap = styled("div")`
 `;
 
 export const ChatContainer = () => {
-  const { currentRoomId } = useAppSelector((state) => state.chat);
+  const { currentRoomId, rooms, messages } = useGetChatState();
+  const { user, logged } = useGetUserState();
 
-  const user = {
-    roomName: "Duyen",
-    avatar:
-      "https://slek.laborasyon.com/demos/dark/dist/media/img/man_avatar3.jpg"
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (logged) {
+      const socket = initSocket(user.userId);
+      socketRef.current = socket;
+    }
+  }, []);
+
+  const currentRoom = useMemo(() => {
+    return rooms.find((room) => room.roomId === currentRoomId);
+  }, [currentRoomId]);
+
+  const handleSendMessage = (value: ChatFormValue) => {
+    const payload: SendMessagePayload = {
+      senderId: user.userId,
+      roomId: currentRoomId,
+      messageText: value.messageText,
+    };
+    socketRef.current?.emit(MESSAGE_EVENT, payload);
   };
+
   return (
     <Wrap>
       {currentRoomId ? (
         <>
-          <ChatHeader room={user} />
-          <div style={{ padding: "30px", marginTop: "80px" }}>
-            <Message />
-            <Message isRecive={true} />
-          </div>
-          <ChatFooter />
+          <ChatHeader room={currentRoom} />
+          <ChatBody>
+            {messages.map((message, index) => {
+              const isSameUser =
+                index !== 0
+                  ? messages[index - 1].sender.userId === message.sender.userId
+                  : false;
+              return (
+                <Message
+                  key={message.messageId}
+                  message={message}
+                  isRecive={user.userId !== message.sender.userId}
+                  isSameUser={isSameUser}
+                />
+              );
+            })}
+          </ChatBody>
+
+          <ChatFooter onSubmitFunc={handleSendMessage} />
         </>
       ) : (
         <NoRoomSelected>
